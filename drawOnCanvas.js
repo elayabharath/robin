@@ -1,8 +1,5 @@
-ctx.fillStyle = "#FF0000";
-ctx.fillRect(0,0,150,75);
-ctx.moveTo(0,0);
-ctx.lineTo(200,100);
-ctx.stroke();
-ctx.beginPath();
-ctx.arc(95,50,40,0,2*Math.PI);
-ctx.stroke();
+for(var i = 5; i < 100; i=i+10)
+  for(var j = 5; j < 100; j=j+10) {
+  var myPoint = Point.Create(i*10, j*10);
+  var myCircle = Circle.Create(myPoint, Math.random()*20);
+}
