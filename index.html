@@ -1,38 +1,103 @@
-<!doctype html>
-<html lang="en" ng-app="application">
+<html>
+    <head>
 
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>zTravel</title>
-  <link href="/foundation-app.css" rel="stylesheet" type="text/css">
-  <link href="/style.css" rel="stylesheet" type="text/css">
-</head>
+    </head>
+    <body>
+        <div id="wrap">
+        	<!-- Code Editors -->
+        	<section id="code_editors">
+        		<div id="js" class="code_box">
+        			<textarea name="js"></textarea>
+        		</div>
+        	</section>
+        	<!-- Sandboxing -->
+        	<section id="output">
+        		<iframe></iframe>
+        	</section>
 
-<body>
-  <div class="grid-frame vertical">
-    <div class="grid-block shrink wrap">
-      <div class="grid-content collapse small-12 medium-12">
-        <ul class="menu-bar dark">
-          <li><a>Robin</a></li>
-        </ul>
-      </div>
-    </div>
+        </div>
+        <script>
+            var js_editor = document.querySelector('#js textarea');
+            var code = "";
+            js_editor.addEventListener('keyup', function() {
+                if (code !== this.value) {
+                    render(this.value);
+                    code = this.value;
+                }
+            }, false);
 
-    <div class="grid-block">
-      <div class="grid-block small-12 medium-6 wrap main-content">
-        Editor place-holder
-      </div>
-      <div class="grid-block show-for-medium medium-6" id="viewer">
-        <canvas id="canvas">
-        </canvas>
-      </div>
-    </div>
-  </div>
+            var firstrun = 0;
 
-  <script src="loadCanvas.js"></script>
-  <script src="GeomLibrary.js"></script>
-  <script src="drawOnCanvas.js"></script>
-</body>
+            // Base template
+            var base_tpl =
+                "<!doctype html>\n" +
+                "<html>\n\t" +
+                "<head>\n\t\t" +
+                "<meta charset=\"utf-8\">\n\t\t" +
+                "<title>Test</title>\n\n\t\t\n\t" +
+                "</head>\n\t" +
+                "<body>\n\t\n\t" +
+                "</body>\n" +
+                "</html>";
 
+            var prepareSource = function() {
+                var js = js_editor.value;
+                // Javascript
+                js = "<script>"+js+"</script\>";
+                src = base_tpl; //.replace('</body>', js + '</body>');
+                return src;
+            };
+
+            var render = function(code_to_run) {
+                var source = prepareSource();
+                var iframe = document.querySelector('#output');
+                iframe.innerHTML = "";
+                iframeElem = document.createElement("iframe");
+                iframe.appendChild(iframeElem);
+                iframe_doc = iframeElem.contentDocument;
+
+                iframe_doc.open();
+                iframe_doc.write(source);
+
+                console.log(code_to_run);
+
+                // code_to_run="a=10;";
+
+                js_code = "console.log(window.elements);"+
+                    "var globalProps = [ ];" +
+                    "function readGlobalProps() {" +
+                    "    globalProps = Object.getOwnPropertyNames( window );" +
+                    "}"+
+
+                    "function findNewEntries() {" +
+                    "    var currentPropList = Object.getOwnPropertyNames( window );" +
+                    "    return currentPropList.filter( findDuplicate );" +
+                    "    function findDuplicate( propName ) {" +
+                    "        return globalProps.indexOf( propName ) === -1;" +
+                    "    }" +
+                    "}" +
+
+                    "readGlobalProps();" +
+
+                    "var code_to_execute = '"+code_to_run.toString()+"' ;" +
+                    "var script = document.createElement('script');" +
+                    "script.innerHTML = code_to_execute;" +
+                    "document.head.appendChild(script);" +
+
+                    "var elements = findNewEntries();" +
+                    "console.log(window.elements);" +
+                    "window.elements.forEach(function(elem){ document.write(elem + ':' + eval(elem) + ' / '); });" ;
+
+                console.log(js_code);
+
+                var script = document.createElement('script');
+                script.innerHTML = js_code;
+                iframe_doc.body.appendChild(script);
+                iframe_doc.close();
+
+                firstrun = 1;
+            };
+
+        </script>
+    </body>
 </html>
