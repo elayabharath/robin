@@ -40,16 +40,8 @@
                 "</body>\n" +
                 "</html>";
 
-            var prepareSource = function() {
-                var js = js_editor.value;
-                // Javascript
-                js = "<script>"+js+"</script\>";
-                src = base_tpl; //.replace('</body>', js + '</body>');
-                return src;
-            };
-
             var render = function(code_to_run) {
-                var source = prepareSource();
+                var source = base_tpl;
                 var iframe = document.querySelector('#output');
                 iframe.innerHTML = "";
                 iframeElem = document.createElement("iframe");
@@ -59,11 +51,7 @@
                 iframe_doc.open();
                 iframe_doc.write(source);
 
-                console.log(code_to_run);
-
-                // code_to_run="a=10;";
-
-                js_code = "console.log(window.elements);"+
+                js_code =
                     "var globalProps = [ ];" +
                     "function readGlobalProps() {" +
                     "    globalProps = Object.getOwnPropertyNames( window );" +
@@ -79,16 +67,13 @@
 
                     "readGlobalProps();" +
 
-                    "var code_to_execute = '"+code_to_run.toString()+"' ;" +
+                    "var code_to_execute = '"+code_to_run.replace(/(\n)+/g, "").trim()+"' ;" +
                     "var script = document.createElement('script');" +
                     "script.innerHTML = code_to_execute;" +
                     "document.head.appendChild(script);" +
 
                     "var elements = findNewEntries();" +
-                    "console.log(window.elements);" +
                     "window.elements.forEach(function(elem){ document.write(elem + ':' + eval(elem) + ' / '); });" ;
-
-                console.log(js_code);
 
                 var script = document.createElement('script');
                 script.innerHTML = js_code;
