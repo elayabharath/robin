@@ -1,2 +1,6 @@
-#node modules
-node_modules/
+node_modules
+build/main.js
+build/specs.js
+build/vendors.js
+TEST-App.xml
+npm-debug.log

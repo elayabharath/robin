@@ -1,0 +1,24 @@
+@import url('http://cdn.jsdelivr.net/zurb/foundation-apps-1.0.2.min.css');
+@import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro');
+
+html {
+    padding: 0;
+    margin: 0;
+    height: 100%;
+}
+
+body {
+    min-height: 100%;
+    height: 100%;
+    background: #eee;
+    font-family: 'Source Sans Pro', serif;
+}
+
+.navigation-container {
+    background: #555555;
+}
+
+.navigation-content {
+    padding: 12px;
+    color: #FFF;
+}
