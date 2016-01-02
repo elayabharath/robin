@@ -8,14 +8,15 @@ var locationX = 0, locationY = 0;
 var SVGViewer = React.createClass({
 
 	getInitialState: function() {
-        return {
-            dragging: false,
+		return {
+			zoomLevel: 1,
+			dragging: false,
 			locX: 0,
 			locY: 0,
 			startX: 0,
 			startY: 0
-        };
-    },
+		}
+	},
 
 	onDragStart: function(e) {
 		e.preventDefault();
@@ -27,12 +28,8 @@ var SVGViewer = React.createClass({
 
 		var state = {
             dragging: true,
-
-			locX: startX,
-			locY: startY,
-
-			startX: startX,
-            startY: startY
+			startX: - this.state.locX + startX,
+            startY: - this.state.locY + startY
         };
 
         this.setState(state);
@@ -54,7 +51,7 @@ var SVGViewer = React.createClass({
 		locationX = x;
 		locationY = y;
 
-		this.setState({locX: this.state.startX - x, locY: this.state.startY - y});
+		this.setState({locX: x, locY: y});
 
 	},
 
@@ -75,18 +72,27 @@ var SVGViewer = React.createClass({
         if (!(this.el instanceof window.Node)) {
             this.el = this.el.getDOMNode();
         }
+
+		this.refs.container.getDOMNode().addEventListener('wheel', this.handleScroll);
     },
 
+	handleScroll: function(e) {
+		var delta = Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail)));
+		var zLevel = this.state.zoomLevel+delta*0.05;
+
+		this.setState({zoomLevel: zLevel < 0.1 ? 0.1 : zLevel});
+	},
+
+	componentWillUnmount: function() {
+    	this.refs.container.getDOMNode().removeEventListener('wheel', this.handleScroll);
+	},
+
 	render: function() {
-		// console.log(this.state.locX, this.state.locY);
 		return (
-			<SVGComponent
-			ref="container"
-			height="100%"
-			width="100%"
-			onMouseDown={this.onDragStart}
-			viewBox={this.state.locX+" "+this.state.locY+" 600 800"}>
-				<circle x="0" y="0" r="50"/>
+			<SVGComponent height="100%" width="100%" ref="container" onMouseDown={this.onDragStart}>
+				<g transform={"matrix("+this.state.zoomLevel+" 0 0 "+this.state.zoomLevel+" "+this.state.locX+" "+this.state.locY+")"}>
+					<circle x="0" y="0" r="50"/>
+				</g>
 			</SVGComponent>);
 	}
 
