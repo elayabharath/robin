@@ -6,7 +6,9 @@ var Link = require('react-router').Link;
 var SVGComponent = React.createClass({
 
 	render: function() {
-        return <svg {...this.props}>{this.props.children}</svg>;
+        return <svg {...this.props}>
+			{this.props.children}
+		</svg>;
     }
 
 });

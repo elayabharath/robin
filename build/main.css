@@ -1,5 +1,5 @@
 @import url('http://cdn.jsdelivr.net/zurb/foundation-apps-1.0.2.min.css');
-@import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro');
+/* @import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro'); */
 
 html {
     padding: 0;
@@ -12,6 +12,37 @@ body {
     height: 100%;
     background: #eee;
     font-family: 'Source Sans Pro', serif;
+}
+
+textarea {
+    resize: none;
+    height: 100%;
+    font-family: monospace;
+    font-size: 16px;
+}
+
+div#editor {
+    height: 100%;
+    overflow-y: hidden;
+}
+
+div#viewer {
+    height: 100%;
+    background: #ddd;
+    cursor: -webkit-grab;
+}
+
+div#viewer:active {
+    cursor: -webkit-grabbing;
+}
+
+.main-container {
+    height: 100%;
+    background: #ccc;
+}
+
+.main-container > .grid-block {
+    height: 90%;
 }
 
 .navigation-container {
