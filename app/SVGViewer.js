@@ -3,7 +3,9 @@ var Router = require('react-router');
 var eventListener = require('eventlistener');
 var SVGComponent = require('./SVGComponent');
 
-var locationX = 0, locationY = 0;
+var isDown = false; // whether mouse is pressed
+var startCoords = []; // 'grab' coordinates when pressing mouse
+var last = [0, 0]; // previous coordinates of mouse release
 
 var SVGViewer = React.createClass({
 
@@ -12,75 +14,68 @@ var SVGViewer = React.createClass({
 			zoomLevel: 1,
 			dragging: false,
 			locX: 0,
-			locY: 0,
-			startX: 0,
-			startY: 0
+			locY: 0
 		}
 	},
 
-	onDragStart: function(e) {
+	handleMouseDown: function(e) {
 		e.preventDefault();
+		isDown = true;
 
-		console.log("drag start");
-
-		var startX = typeof e.clientX === 'undefined' ? e.changedTouches[0].clientX : e.clientX,
-            startY = typeof e.clientY === 'undefined' ? e.changedTouches[0].clientY : e.clientY;
-
-		var state = {
-            dragging: true,
-			startX: - this.state.locX + startX,
-            startY: - this.state.locY + startY
-        };
-
-        this.setState(state);
-
-		eventListener.add(window, 'mousemove', this.onDragMove);
-        eventListener.add(window, 'touchmove', this.onDragMove);
-        eventListener.add(window, 'mouseup', this.onDragStop);
-        eventListener.add(window, 'touchend', this.onDragStop);
+	    startCoords = [
+	        e.clientX,
+	        e.clientY
+		];
 	},
 
-	onDragMove: function(e){
-		if (!this.state.dragging) {
-            return;
-        }
+	handleMouseMove: function(e){
+		e.preventDefault();
+		if(!isDown) return; // don't pan if mouse is not pressed
 
-        var x = typeof e.clientX === 'undefined' ? e.changedTouches[0].clientX : e.clientX,
-            y = typeof e.clientY === 'undefined' ? e.changedTouches[0].clientY : e.clientY;
+		var x = e.clientX;
+	    var y = e.clientY;
 
-		locationX = x;
-		locationY = y;
+		var mouseMovedDistX = x - startCoords[0];
+		var mouseMovedDistY = y - startCoords[1];
 
-		this.setState({locX: x, locY: y});
-
+		this.setState({locX: last[0] + mouseMovedDistX, locY: last[1] + mouseMovedDistY});
 	},
 
-	onDragStop: function(e){
-		this.setState({ dragging: false });
+	handleMouseUp: function(e){
+		e.preventDefault();
+		isDown = false;
 
-        eventListener.remove(window, 'mousemove', this.onDragMove);
-        eventListener.remove(window, 'touchmove', this.onDragMove);
-        eventListener.remove(window, 'mouseup', this.onDragStop);
-        eventListener.remove(window, 'touchend', this.onDragStop);
+		last = [
+			this.state.locX, this.state.locY
+	    ];
 	},
 
 	componentDidMount: function() {
-        // Cached for faster lookup
         this.el = this.refs.container;
-
-        // Old versions of React doesn't return the raw DOM node
-        if (!(this.el instanceof window.Node)) {
-            this.el = this.el.getDOMNode();
-        }
-
 		this.refs.container.getDOMNode().addEventListener('wheel', this.handleScroll);
     },
 
 	handleScroll: function(e) {
+		var rect = this.refs.container.getDOMNode().getClientRects()[0];
 		var delta = Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail)));
 		var zLevel = this.state.zoomLevel+delta*0.05;
 
-		this.setState({zoomLevel: zLevel < 0.1 ? 0.1 : zLevel});
+		var rectCenX = rect.left + rect.width / 2;
+		var rectCenY = rect.top + rect.height / 2;
+
+		var mousePosX = e.clientX;
+		var mousePosY = e.clientY;
+
+		var panX = (rectCenX - mousePosX) * 0.01 * delta;
+		var panY = (rectCenY - mousePosY) * 0.01 * delta;
+
+		if(zLevel > 0.1) {
+			this.setState({
+				zoomLevel: zLevel,
+				locX: this.state.locX + panX,
+				locY: this.state.locY + panY
+			});
+		}
 	},
 
 	componentWillUnmount: function() {
@@ -89,7 +84,13 @@ var SVGViewer = React.createClass({
 
 	render: function() {
 		return (
-			<SVGComponent height="100%" width="100%" ref="container" onMouseDown={this.onDragStart}>
+			<SVGComponent
+				height="100%"
+				width="100%"
+				ref="container"
+				onMouseDown={this.handleMouseDown}
+				onMouseUp={this.handleMouseUp}
+				onMouseMove={this.handleMouseMove}>
 				<g transform={"matrix("+this.state.zoomLevel+" 0 0 "+this.state.zoomLevel+" "+this.state.locX+" "+this.state.locY+")"}>
 					<circle x="0" y="0" r="50"/>
 				</g>
