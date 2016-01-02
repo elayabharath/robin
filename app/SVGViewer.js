@@ -6,15 +6,17 @@ var SVGComponent = require('./SVGComponent');
 var isDown = false; // whether mouse is pressed
 var startCoords = []; // 'grab' coordinates when pressing mouse
 var last = [0, 0]; // previous coordinates of mouse release
+var rect=null, rectCenX=null, rectCenY=null;
 
 var SVGViewer = React.createClass({
 
 	getInitialState: function() {
 		return {
 			zoomLevel: 1,
-			dragging: false,
 			locX: 0,
-			locY: 0
+			locY: 0,
+			rectW: 0,
+			rectH: 0
 		}
 	},
 
@@ -52,16 +54,19 @@ var SVGViewer = React.createClass({
 
 	componentDidMount: function() {
         this.el = this.refs.container;
+		rect = this.refs.container.getDOMNode().getClientRects()[0];
+		rectCenX = rect.left + rect.width / 2;
+		rectCenY = rect.top + rect.height / 2;
+		last = [rect.width / 2, rect.height /2];
+		this.setState({locX: last[0], locY: last[1]});
 		this.refs.container.getDOMNode().addEventListener('wheel', this.handleScroll);
     },
 
 	handleScroll: function(e) {
-		var rect = this.refs.container.getDOMNode().getClientRects()[0];
 		var delta = Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail)));
-		var zLevel = this.state.zoomLevel+delta*0.05;
-
-		var rectCenX = rect.left + rect.width / 2;
-		var rectCenY = rect.top + rect.height / 2;
+		var zLevel = this.state.zoomLevel < 1 ?
+			this.state.zoomLevel + delta * 0.01
+			: this.state.zoomLevel + delta * 0.05;
 
 		var mousePosX = e.clientX;
 		var mousePosY = e.clientY;
@@ -69,7 +74,7 @@ var SVGViewer = React.createClass({
 		var panX = (rectCenX - mousePosX) * 0.01 * delta;
 		var panY = (rectCenY - mousePosY) * 0.01 * delta;
 
-		if(zLevel > 0.1) {
+		if(zLevel > 0.1 && zLevel < 8) {
 			this.setState({
 				zoomLevel: zLevel,
 				locX: this.state.locX + panX,
@@ -92,7 +97,9 @@ var SVGViewer = React.createClass({
 				onMouseUp={this.handleMouseUp}
 				onMouseMove={this.handleMouseMove}>
 				<g transform={"matrix("+this.state.zoomLevel+" 0 0 "+this.state.zoomLevel+" "+this.state.locX+" "+this.state.locY+")"}>
-					<circle x="0" y="0" r="50"/>
+					<rect fill="url(#smallGrid)" x="-1000" y="-1000" width="2001" height="2001"/>
+		  		  	<rect fill="url(#grid)" x="-1000" y="-1000" width="2001" height="2001"/>
+					<circle x="0" y="0" r="50" stroke="blue" strokeWidth="1" fill="none"/>
 				</g>
 			</SVGComponent>);
 	}
