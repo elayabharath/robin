@@ -7,6 +7,8 @@ var SVGComponent = require('./SVGComponent');
 var Codeeditor = require('./Codeeditor');
 var SVGViewer = require('./SVGViewer');
 
+var Store = require('./Store');
+
 var Homepage = React.createClass({
 
 	getInitialState: function() {

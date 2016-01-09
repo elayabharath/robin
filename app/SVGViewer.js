@@ -1,5 +1,7 @@
 var React = require('react');
 var Router = require('react-router');
+var Reflux = require('reflux');
+var Store = require('./Store');
 var eventListener = require('eventlistener');
 var SVGComponent = require('./SVGComponent');
 
@@ -7,8 +9,11 @@ var isDown = false; // whether mouse is pressed
 var startCoords = []; // 'grab' coordinates when pressing mouse
 var last = [0, 0]; // previous coordinates of mouse release
 var rect=null, rectCenX=null, rectCenY=null;
+var objects = {};
 
 var SVGViewer = React.createClass({
+
+	mixins: [Reflux.connect(Store,"data")],
 
 	getInitialState: function() {
 		return {
@@ -88,6 +93,17 @@ var SVGViewer = React.createClass({
 	},
 
 	render: function() {
+
+		objects = this.state.data.objects.map(function(item, index){
+			switch (item.type) {
+				case "circle":
+					return <circle cx={item.cx} cy={item.cy} r={item.radius} fill={item.fill} fillOpacity={item.fillOpacity} key={index}/>
+					break;
+				default:
+					break;
+			}
+		});
+
 		return (
 			<SVGComponent
 				height="100%"
@@ -99,7 +115,9 @@ var SVGViewer = React.createClass({
 				<g transform={"matrix("+this.state.zoomLevel+" 0 0 "+this.state.zoomLevel+" "+this.state.locX+" "+this.state.locY+")"}>
 					<rect fill="url(#smallGrid)" x="-1000" y="-1000" width="2001" height="2001"/>
 		  		  	<rect fill="url(#grid)" x="-1000" y="-1000" width="2001" height="2001"/>
-					<circle x="0" y="0" r="50" stroke="blue" strokeWidth="1" fill="none"/>
+					<g>
+						{objects}
+					</g>
 				</g>
 			</SVGComponent>);
 	}
