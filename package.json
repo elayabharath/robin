@@ -29,7 +29,8 @@
     "react": "^0.13.3",
     "react-tether": "^0.1.2",
     "reflux": "^0.3.0",
-    "superagent": "^1.5.0",
-    "superagent-jsonp": "0.0.6"
+    "superagent": "^1.6.1",
+    "superagent-jsonp": "0.0.6",
+    "underscore": "^1.8.3"
   }
 }

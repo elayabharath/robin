@@ -4,15 +4,18 @@ var Router = require('react-router');
 var Link = require('react-router').Link;
 var Navigation = require('./Navigation');
 var SVGComponent = require('./SVGComponent');
-var Codeeditor = require('./Codeeditor');
 var SVGViewer = require('./SVGViewer');
-
-var Store = require('./Store');
+var VariableStore = require('./VariableStore');
 
 var Homepage = React.createClass({
 
 	getInitialState: function() {
-		return {error: null};
+		return {};
+	},
+
+	updateCodeStore: function() {
+		var code = this.refs.code.getDOMNode().value;
+		VariableStore.updateCode(code);
 	},
 
 	render: function() {
@@ -21,7 +24,11 @@ var Homepage = React.createClass({
 				<Navigation></Navigation>
 				<div className="grid-block">
 					<div id="editor" className="medium-4 grid-block">
-						<textarea placeholder="Write some js code here"></textarea>
+						<textarea
+							placeholder="Write some js code here"
+							onChange={this.updateCodeStore}
+							ref="code">
+						</textarea>
 					</div>
 					<div id="viewer" className="medium-8 grid-block">
 						<SVGViewer></SVGViewer>

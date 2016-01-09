@@ -1,5 +1,4 @@
 var React = require('react');
-var MasterContainer = require('./MasterContainer.js');
 var Homepage = require('./Homepage.js');
 
 var routerModule = require('react-router');
@@ -10,15 +9,12 @@ var Route = routerModule.Route;
 var App = React.createClass({
 
   render: function() {
-    return (
-      <MasterContainer></MasterContainer> 
-    );
+    return null;
   }
 });
 
 React.render((
   <Router>
     <Route path="/" component={Homepage} />
-    <Route name="read" path="/read/" component={MasterContainer} />
   </Router>
 ), document.body);

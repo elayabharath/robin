@@ -1,7 +1,7 @@
 var React = require('react');
 var Router = require('react-router');
 var Reflux = require('reflux');
-var Store = require('./Store');
+var VariableStore = require('./VariableStore');
 var eventListener = require('eventlistener');
 var SVGComponent = require('./SVGComponent');
 
@@ -13,11 +13,11 @@ var objects = {};
 
 var SVGViewer = React.createClass({
 
-	mixins: [Reflux.connect(Store,"data")],
+	mixins: [Reflux.connect(VariableStore,"data")],
 
 	getInitialState: function() {
 		return {
-			zoomLevel: 1,
+			zoomLevel: 2,
 			locX: 0,
 			locY: 0,
 			rectW: 0,
@@ -94,10 +94,10 @@ var SVGViewer = React.createClass({
 
 	render: function() {
 
-		objects = this.state.data.objects.map(function(item, index){
+		objects = this.state.data.renderObjects.map(function(item, index){
 			switch (item.type) {
 				case "circle":
-					return <circle cx={item.cx} cy={item.cy} r={item.radius} fill={item.fill} fillOpacity={item.fillOpacity} key={index}/>
+					return <circle cx={item.x} cy={item.y} r={item.r} fill={item.fill} stroke={item.stroke} m={10} key={index}/>
 					break;
 				default:
 					break;
@@ -120,6 +120,8 @@ var SVGViewer = React.createClass({
 					</g>
 				</g>
 			</SVGComponent>);
+
+		return null;
 	}
 
 });

@@ -1,0 +1,11 @@
+function circle(x, y, r) {
+	this.x = x || 0;
+	this.y = y || 0;
+	this.r = r || 1;
+	this.type = 'circle';
+
+	this.scale = function(xTimes) {
+		this.r = this.r * xTimes;
+	}
+
+}
