@@ -32,8 +32,23 @@ var VariableStore = Reflux.createStore({
         return this.data;
     },
 
+    checkIfGeometry: function(val) {
+        console.log(val);
+        if(val && val.constructor != undefined)
+        switch (val.constructor.name) {
+            case 'circle':
+                return val;
+                break;
+            default:
+                return null;
+        }
+
+        return null;
+    },
+
     updateCode: function(code) {
         this.data.code = code;
+        var self = this;
 
         var context = vm.createContext();
 		vm.runInContext(libCode, context);
@@ -54,6 +69,13 @@ var VariableStore = Reflux.createStore({
                 case 'circle':
                     geomObjects.push(val);
                     break;
+                case 'Array':
+                    var flatArray = _.flatten(val);
+                    flatArray.forEach(function(item){
+                        var geomItem = self.checkIfGeometry(item);
+                        if(geomItem)
+                            geomObjects.push(geomItem);
+                    });
                 default:
 
             }

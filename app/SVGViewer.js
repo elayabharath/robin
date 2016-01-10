@@ -17,7 +17,7 @@ var SVGViewer = React.createClass({
 
 	getInitialState: function() {
 		return {
-			zoomLevel: 2,
+			zoomLevel: 1,
 			locX: 0,
 			locY: 0,
 			rectW: 0,
@@ -79,7 +79,7 @@ var SVGViewer = React.createClass({
 		var panX = (rectCenX - mousePosX) * 0.01 * delta;
 		var panY = (rectCenY - mousePosY) * 0.01 * delta;
 
-		if(zLevel > 0.1 && zLevel < 8) {
+		if(zLevel > 0.1 && zLevel < 100) {
 			this.setState({
 				zoomLevel: zLevel,
 				locX: this.state.locX + panX,
@@ -97,7 +97,14 @@ var SVGViewer = React.createClass({
 		objects = this.state.data.renderObjects.map(function(item, index){
 			switch (item.type) {
 				case "circle":
-					return <circle cx={item.x} cy={item.y} r={item.r} fill={item.fill} stroke={item.stroke} m={10} key={index}/>
+					return <circle
+						cx={item.x}
+						cy={item.y}
+						r={item.r}
+						fill={item.color}
+						stroke={item.stroke}
+						opacity={item.opacity}
+						key={index}/>
 					break;
 				default:
 					break;
