@@ -33,10 +33,10 @@ var VariableStore = Reflux.createStore({
     },
 
     checkIfGeometry: function(val) {
-        console.log(val);
         if(val && val.constructor != undefined)
         switch (val.constructor.name) {
             case 'circle':
+            case 'line':
                 return val;
                 break;
             default:
@@ -67,6 +67,7 @@ var VariableStore = Reflux.createStore({
             var val = allVariables[key];
             switch (val.constructor.name) {
                 case 'circle':
+                case 'line':
                     geomObjects.push(val);
                     break;
                 case 'Array':

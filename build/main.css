@@ -44,7 +44,7 @@ div#viewer:active {
 }
 
 .main-container > .grid-block {
-    height: 90%;
+    height: 100%;
 }
 
 .navigation-container {
@@ -53,5 +53,8 @@ div#viewer:active {
 
 .navigation-content {
     padding: 12px;
+}
+
+.navigation-content span{
     color: #FFF;
 }

@@ -106,6 +106,16 @@ var SVGViewer = React.createClass({
 						opacity={item.opacity}
 						key={index}/>
 					break;
+				case "line":
+					return <line
+						x1={item.x1}
+						y1={item.y1}
+						x2={item.x2}
+						y2={item.y2}
+						stroke={item.stroke}
+						strokeWidth={item.strokeWidth}
+						opacity={item.opacity}
+						key={index}/>
 				default:
 					break;
 			}

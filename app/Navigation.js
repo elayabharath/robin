@@ -1,6 +1,7 @@
 var React = require('react');
 var validUrl = require('valid-url');
 var Router = require('react-router');
+var Actions = require('./Actions');
 var Link = require('react-router').Link;
 
 var Navigation = React.createClass({
@@ -15,6 +16,7 @@ var Navigation = React.createClass({
 			<div className="navigation-container">
 				<div className="navigation-content">
 					<span>Robin</span>
+					{/*<button onClick={Actions.downloadAsked} value="Download">Download</button>*/}
 				</div>
 	        </div>
         );
