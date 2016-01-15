@@ -1,5 +1,4 @@
-@import url('http://cdn.jsdelivr.net/zurb/foundation-apps-1.0.2.min.css');
-/* @import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro'); */
+@import url('foundation-apps-1.0.2.min.css');
 
 html {
     padding: 0;
@@ -49,6 +48,10 @@ div#viewer:active {
 
 .navigation-container {
     background: #555555;
+}
+
+.navigation-container img{
+    height: 20px;
 }
 
 .navigation-content {
