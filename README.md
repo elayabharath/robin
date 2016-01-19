@@ -1,39 +1,153 @@
-## React App Boilerplate
+## Robin
 
-Start developing React JS applications easily with the included tooling. Using gulp with browserify and jasmine for testing.
+Robin is a tool for designers to easily create svg images programmatically. It has a simple, easy to use api and an edit to view and export the image.
 
-Read more about how it works at: [React JS workflow, part 2](http://christianalfoni.github.io/javascript/2014/10/30/react-js-workflow-part2.html)
-
-### Notes
-The boilerplate is minimalistic, meaning you have to expand on the current workflow for handling static assets etc.
-
-### Install
-
-* Clone the repo
-* Run `npm install`
+### Usage
+* This should contain the api of functions that can be used to draw in Robin
 
 ### Changes
 
-**2.2.3**
-  - Now works with React 0.13.1 (Thanks to @fatso83)
+**0.1.0**
+	- Structure, basic shapes
 
-**2.2.2**
-  - Added es5 shim to testrunner-phantom.js html as phantomJS does not have bind etc.
 
-**2.2.1**
+### ROADMAP
 
-  - Updated package.json dep versions
+#### Common functions for all shapes
 
-**2.2.0**
+* scale ()
+* scaleabout ()
+* move ()
+* rotate ()
+* rotateabout ()
+* shear ()
+* reflect .. about x, y, or any line ()
+* Get points on curve at equal distance ()
 
-  - Using gulp-watch instead of gulp.watch, now reacts to adding and deleting files
+#### Common properties
 
-**2.1.0**
+* color
+* stroke
+* stroke width
+* opacity
+* stroke opacity
+* fill opacity
+* stroke dash array
+* visibility ?
 
-  - Fixed watch bug
-  - Deploy does not include react-addons
+#### Shapes
+
+##### Rectangle
+
+* Properties
+   - len, wid, top left, top right, bottom left, bottom right, centroid, rotation wrt x axis / y axis, corner rad, area, perimeter
+  
+* creators:
+	- (x1, y1, x2, y2, [corner-rad])
+	- start pt, end pt, rad
+	- pt, len, wid, rad
+	
+* methods:
+	- round() // round corners
+	
+##### Circle
+* Properties
+   - rad, center, x, y, area, perimeter
+   
+* creators: 
+	- (x, y, r)
+	
+* methods:
+
+
+##### Ellipse
+* Properties
+    - x, y, rx, ry, area, perimeter, loci, rotation wrt x axis / y axis
+   
+* creators: 
+	- (cx, cy, rx, ry)
+	
+* methods:
+
+	
+
+##### Line
+* Properties
+    - start pt, end pt, start x, start y, end x, end y, length, angle wrt to x axis / y axis,
+   
+* creators: 
+	- (x1, y1, x2, y2)
+	- (start pt, end pt)
+	- (start pt, length, angle)
+	
+* methods:
+     
+	
+##### Polyline
+* Properties
+    - points, length, number of segments, regression line, start point, end point, angles wrt x-axis / y-axis
+   
+* creators: 
+	* 	(points)
+	* 	([x1, y1, x2, y2, ...])
+	
+* methods:
+
+   	 
+##### Polygon
+* Properties
+	* points, number of sides, area, self intersecting?
+   
+* creators: 
+	* 	(points)
+	* 	(number of sides, radius)
+	
+* methods:
+
+
+	
+##### Square, star, hexagon, octagon, triangle, pentagon
+
+[To be filled ]
+
+* Properties
+    
+* creators: 
+	
+* methods:
+
+
+
+##### Point
+* Properties
+    *    x, y, distance from origin, angle wrt to x axis / y axis
+   
+* creators: 
+	* 	(x, y)
+
+	
+* methods:
+
+
+
+
+##### Bezier curve
+* Properties
+    - points, length, number of segments, regression line, start point, end point, angles wrt x-axis / y-axis
+   
+* creators: 
+	* 	(points)
+	* 	([x1, y1, x2, y2, ...])
+	
+* methods:
+
+
+
 
 ### Development
+* Clone the repo
+* Run `npm install`
+* Read more about how it works at: [React JS workflow, part 2](http://christianalfoni.github.io/javascript/2014/10/30/react-js-workflow-part2.html)
 * Run `NODE_ENV=development gulp`
 * Go to `localhost:8889` to display the app
 * Go to `localhost:8889/testrunner.html` to see your tests
