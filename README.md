@@ -1,79 +1,52 @@
-## Get started
+## React App Boilerplate
+
+Start developing React JS applications easily with the included tooling. Using gulp with browserify and jasmine for testing.
+
+Read more about how it works at: [React JS workflow, part 2](http://christianalfoni.github.io/javascript/2014/10/30/react-js-workflow-part2.html)
+
+### Notes
+The boilerplate is minimalistic, meaning you have to expand on the current workflow for handling static assets etc.
+
+### Install
+
+* Clone the repo
+* Run `npm install`
+
+### Changes
+
+**2.2.3**
+  - Now works with React 0.13.1 (Thanks to @fatso83)
+
+**2.2.2**
+  - Added es5 shim to testrunner-phantom.js html as phantomJS does not have bind etc.
+
+**2.2.1**
+
+  - Updated package.json dep versions
+
+**2.2.0**
+
+  - Using gulp-watch instead of gulp.watch, now reacts to adding and deleting files
+
+**2.1.0**
+
+  - Fixed watch bug
+  - Deploy does not include react-addons
 
 ### Development
-Pull code
-run 'npm install'
-run 'NODE_ENV=development gulp'
-localhost:8889
+* Run `NODE_ENV=development gulp`
+* Go to `localhost:8889` to display the app
+* Go to `localhost:8889/testrunner.html` to see your tests
+* Any changes to `app` or `styles` folder will automatically rebuild to `build` folder
+* Both tests and application changes will refresh automatically in the browser
+* Run `gulp test` to run all tests with phantomJS and produce XML reports
 
-### Deploy
-run 'NODE_ENV=production gulp deloy'
+### Minify the code, ready for production
+* Run `NODE_ENV=production gulp deploy`
 
-## V0 shapes
-
-### Common functions for all shapes
-scale ()
-scaleabout ()
-move ()
-rotate ()
-rotateabout ()
-shear ()
-reflect .. about x, y, or any line ()
-Get points on curve at equal distance ()
-
-Common properties
-
-color
-stroke
-stroke width
-opacity
-stroke opacity
-fill opacity
-stroke dash array
-visibility ?
-
-### Shapes
-#### rectangle
-    props: len, wid, top left, top right, bottom left, bottom right, centroid, rotation wrt x axis / y axis, corner rad, area, perimeter
-  
-   creators:
-	(x1, y1, x2, y2, [corner-rad])
-	start pt, end pt, rad
-	pt, len, wid, rad
-	
-	methods:
-	round() // round corners
-	
-#### circle
-    rad, center, x, y, area, perimeter
-	(x, y, r)
-
-#### ellipse
-    x, y, rx, ry, area, perimeter, loci, rotation wrt x axis / y axis
-	(cx, cy, rx, ry)
-
-#### Line
-    start pt, end pt, start x, start y, end x, end y, length, angle wrt to x axis / y axis, 
-	(x1, y1, x2, y2)
-	(start pt, end pt)
-	(start pt, length, angle)
-	
-#### polyline
-    points, length, number of segments, regression line, start point, end point, angles wrt x-axis / y-axis
-	(points)
-	([x1, y1, x2, y2, ...])
-	 
-#### polygon
-    points, number of sides, area, self intersecting?
-	(points)
-	(number of sides, radius)
-	
-#### square, star, hexagon, octagon, triangle, pentagon
-   to be filled
-
-#### point
-    x, y, distance from origin, angle wrt to x axis / y axis
-	(x, y)
-
-#### Bezier curve
-  to be filled
+### Directory
+* **build/**: Where your automatically builds to. This is where you launch your app in development
+* **dist/**: Where the deployed code exists, ready for production
+* **styles/**: Where you put your css files
+* **specs/**: Where you put your test files
+* **gulpfile**: Gulp configuration
