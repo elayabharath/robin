@@ -1,4 +1,10 @@
-@import url('foundation-apps-1.0.2.min.css');
+@import 'foundation.scss';
+@import '_settings.scss';
+@import '_global.scss';
+
+#robinapp {
+    height: 100%;
+}
 
 html {
     padding: 0;

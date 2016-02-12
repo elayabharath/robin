@@ -17,7 +17,7 @@ var VariableStore = Reflux.createStore({
         };
 
         var self = this;
-        var url = "Geometry.txt";
+        var url = "Geometry.js";
 
         request
             .get(url)

@@ -1,5 +1,4 @@
 var React = require('react');
-var validUrl = require('valid-url');
 var Router = require('react-router');
 var Link = require('react-router').Link;
 var Navigation = require('./Navigation');
@@ -14,7 +13,7 @@ var Homepage = React.createClass({
 	},
 
 	updateCodeStore: function() {
-		var code = this.refs.code.getDOMNode().value;
+		var code = this.refs.code.value;
 		VariableStore.updateCode(code);
 	},
 

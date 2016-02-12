@@ -6,11 +6,10 @@ cos = function (angle) {
     return Math.cos(angle * (Math.PI / 180));
 }
 
-
 function circle(x, y, r) {
-	this.x = x || 0;
+    this.x = x || 0;
 	this.y = y || 0;
-	this.r = r || 10;
+	this.r = r || 100;
 	this.color = "none";
 	this.stroke = "black";
 	this.opacity = 1;

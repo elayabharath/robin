@@ -1,4 +1,5 @@
 var React = require('react');
+var ReactDOM = require('react-dom');
 var Router = require('react-router');
 var Reflux = require('reflux');
 var VariableStore = require('./VariableStore');
@@ -59,12 +60,12 @@ var SVGViewer = React.createClass({
 
 	componentDidMount: function() {
         this.el = this.refs.container;
-		rect = this.refs.container.getDOMNode().getClientRects()[0];
+		rect = ReactDOM.findDOMNode(this.refs.container).getClientRects()[0];
 		rectCenX = rect.left + rect.width / 2;
 		rectCenY = rect.top + rect.height / 2;
 		last = [rect.width / 2, rect.height /2];
 		this.setState({locX: last[0], locY: last[1]});
-		this.refs.container.getDOMNode().addEventListener('wheel', this.handleScroll);
+		ReactDOM.findDOMNode(this.refs.container).addEventListener('wheel', this.handleScroll);
     },
 
 	handleScroll: function(e) {
@@ -89,7 +90,7 @@ var SVGViewer = React.createClass({
 	},
 
 	componentWillUnmount: function() {
-    	this.refs.container.getDOMNode().removeEventListener('wheel', this.handleScroll);
+		ReactDOM.findDOMNode(this.refs.container).removeEventListener('wheel', this.handleScroll);
 	},
 
 	render: function() {

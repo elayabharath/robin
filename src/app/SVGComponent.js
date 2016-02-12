@@ -1,8 +1,4 @@
 var React = require('react');
-var validUrl = require('valid-url');
-var Router = require('react-router');
-var Link = require('react-router').Link;
-
 var SVGStore = require('./SVGStore');
 
 var SVGComponent = React.createClass({
