@@ -13,6 +13,9 @@ var copy = require('gulp-copy');
 var del = require('del');
 var _ = require('lodash');
 var runSequence = require('run-sequence');
+var uglify = require('gulp-uglify');
+var cssmin = require('gulp-cssmin');
+var buffer = require('vinyl-buffer');
 
 var path = {
     ALL: ['src/**/*.*'],
@@ -36,6 +39,7 @@ function compileStyle(dest) {
         includePaths: [ './node_modules/foundation-apps/scss' ]
     }))
     .pipe(sass())
+    .pipe(cssmin())
     .pipe(rename('robin.css'))
     .pipe(gulp.dest(dest))
     .on('error', sass.logError);
@@ -58,16 +62,32 @@ gulp.task('sass:dev', function(cb) {
     compileStyle(path.DEST_DEV).on('end', cb);
 });
 
+gulp.task('sass:prod', function(cb) {
+    compileStyle(path.DEST_PROD).on('end', cb);
+});
+
 gulp.task('copyFiles:dev', function(cb) {
     copyFiles(path.DEST_DEV).on('end', cb);
+});
+
+gulp.task('copyFiles:prod', function(cb) {
+    copyFiles(path.DEST_PROD).on('end', cb);
 });
 
 gulp.task('copyLib:dev', function(cb) {
     copyLib(path.DEST_DEV).on('end', cb);
 });
 
+gulp.task('copyLib:prod', function(cb) {
+    copyLib(path.DEST_PROD).on('end', cb);
+});
+
 gulp.task('cleanFiles:dev', function(cb){
     del(['development'], cb);
+});
+
+gulp.task('cleanFiles:prod', function(cb){
+    del(['production'], cb);
 });
 
 gulp.task('buildJS:dev', function() {
@@ -80,6 +100,20 @@ gulp.task('buildJS:dev', function() {
         })
         .pipe(source('robin.js'))
         .pipe(gulp.dest(path.DEST_DEV));
+});
+
+gulp.task('buildJS:prod', function() {
+    return browserify('./src/app/Main.js')
+        .transform('reactify')
+        .bundle()
+        .on('error', function(e) {
+            console.log("ERROR");
+            console.log(e.message);
+        })
+        .pipe(source('robin.js'))
+        .pipe(buffer())
+        .pipe(uglify())
+        .pipe(gulp.dest(path.DEST_PROD));
 });
 
 gulp.task('serve:dev', function() {
@@ -134,4 +168,9 @@ gulp.task('watch', function() {
     runSequence('cleanFiles:dev');
     runSequence('buildJS:dev', 'sass:dev', 'copyFiles:dev', 'watch:html', 'watch:scss', 'watch:JS', 'watch:lib');
     runSequence('serve:dev');
+});
+
+gulp.task('production', function() {
+    runSequence('cleanFiles:prod');
+    runSequence('buildJS:prod', 'sass:prod', 'copyFiles:prod', 'copyLib:prod');
 });
