@@ -1,3 +1,7 @@
+## Visit [robinapp.xyz](http://robinapp.xyz) for demo
+
+The tool is still a work in progress, consider it pre-alpha :)
+
 ## Robin
 
 Robin is a tool for designers to easily create svg images programmatically. It has a simple, easy to use api and an edit to view and export the image.
