@@ -96,13 +96,13 @@ var SVGViewer = React.createClass({
 	render: function() {
 
 		objects = this.state.data.renderObjects.map(function(item, index){
-			switch (item.type) {
+			switch (item.constructor.name) {
 				case "circle":
 					return <circle
 						cx={item.x}
 						cy={item.y}
 						r={item.r}
-						fill={item.color}
+						fill={item.fill}
 						stroke={item.stroke}
 						opacity={item.opacity}
 						key={index}/>
@@ -129,14 +129,11 @@ var SVGViewer = React.createClass({
 				ref="container"
 				onMouseDown={this.handleMouseDown}
 				onMouseUp={this.handleMouseUp}
-				onMouseMove={this.handleMouseMove}>
-				<g transform={"matrix("+this.state.zoomLevel+" 0 0 "+this.state.zoomLevel+" "+this.state.locX+" "+this.state.locY+")"}>
-					<rect fill="url(#smallGrid)" x="-1000" y="-1000" width="2001" height="2001"/>
-		  		  	<rect fill="url(#grid)" x="-1000" y="-1000" width="2001" height="2001"/>
-					<g>
-						{objects}
-					</g>
-				</g>
+				onMouseMove={this.handleMouseMove}
+				zoomLevel={this.state.zoomLevel}
+				locX={this.state.locX}
+				locY={this.state.locY}>
+				{objects}
 			</SVGComponent>);
 
 		return null;

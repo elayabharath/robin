@@ -17,8 +17,20 @@ var SVGComponent = React.createClass({
 			  <rect width="100" height="100" fill="url(#smallGrid)"/>
 			  <path d="M 100 0 L 0 0 0 100" fill="none" stroke="#bbb" strokeWidth="1"/>
 			</pattern>
+			<pattern id="axis" width="1000" height="1000" patternUnits="userSpaceOnUse">
+  			  	<path d="M 1000 0 L 0 0 0 1000" fill="none" stroke="#777" strokeWidth="1"/>
+  			</pattern>
 		  </defs>
-		  {this.props.children}
+		  <g transform={"matrix("+this.props.zoomLevel+" 0 0 "+this.props.zoomLevel+" "+this.props.locX+" "+this.props.locY+")"}>
+			  <g>
+					<rect fill="url(#smallGrid)" x="-1000" y="-1000" width="2001" height="2001"/>
+					<rect fill="url(#grid)" x="-1000" y="-1000" width="2001" height="2001"/>
+					<rect fill="url(#axis)" x="-1000" y="-1000" width="2001" height="2001"/>
+			  </g>
+			  <g>
+					{this.props.children}
+			  </g>
+		  </g>
 		</svg>;
 	}
 

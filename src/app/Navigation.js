@@ -14,8 +14,8 @@ var Navigation = React.createClass({
 		return (
 			<div className="navigation-container">
 				<div className="navigation-content">
-					<span><img src="./img/logo.png" height={12} /></span>
-					
+					<span><img src="img/logo.png" height={12} /></span>
+
 					{/*<button onClick={Actions.downloadAsked} value="Download">Download</button>*/}
 				</div>
 	        </div>

@@ -13,7 +13,8 @@ var VariableStore = Reflux.createStore({
         this.data = {
             code: "",
             renderObjects: [],
-            variables: {}
+            variables: {},
+            error: ""
         };
 
         var self = this;
@@ -52,7 +53,14 @@ var VariableStore = Reflux.createStore({
 
         var context = vm.createContext();
 		vm.runInContext(libCode, context);
-		vm.runInContext(code, context);
+        try {
+            vm.runInContext(code, context);
+        } catch (e) {
+            this.data.error = e;
+            this.trigger(this.data);
+            return false;
+        }
+
 		var variableKeys = Object.keys(context);
 
 		var allVariables = {};
