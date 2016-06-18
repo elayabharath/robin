@@ -4,8 +4,7 @@ var Reflux = require('reflux');
 var vm = require('vm');
 var request = require('superagent');
 var _ = require('underscore');
-
-var libCode = "";
+var geom = require('./../geometry/index.js');
 
 var VariableStore = Reflux.createStore({
 
@@ -16,17 +15,6 @@ var VariableStore = Reflux.createStore({
             variables: {},
             error: ""
         };
-
-        var self = this;
-        var url = "Geometry.js";
-
-        request
-            .get(url)
-            .set('Content-Type', 'application/txt')
-            .end(function(err, res) {
-                if (err) throw err;
-                libCode = res.text;
-            });
     },
 
     getInitialState: function() {
@@ -47,13 +35,17 @@ var VariableStore = Reflux.createStore({
         return null;
     },
 
+    simplifyCode: function() {
+        return `var circle = geom.circle`;
+    },
+
     updateCode: function(code) {
         this.data.code = code;
         var self = this;
 
-        var context = vm.createContext();
-		vm.runInContext(libCode, context);
+        var context = vm.createContext({"geom": geom});
         try {
+            vm.runInContext(this.simplifyCode(), context);
             vm.runInContext(code, context);
         } catch (e) {
             this.data.error = e;
@@ -65,7 +57,7 @@ var VariableStore = Reflux.createStore({
 
 		var allVariables = {};
 		variableKeys.forEach(function(variableKey){
-			if(typeof context[variableKey] != 'function')
+			if(typeof context[variableKey] != 'function' && variableKey != 'geom')
 				allVariables[variableKey] = context[variableKey];
 		});
 

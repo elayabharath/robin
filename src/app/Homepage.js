@@ -9,6 +9,7 @@ var VariableStore = require('./VariableStore');
 var Codemirror = require('react-codemirror');
 require('codemirror/mode/javascript/javascript');
 var Inspector = require('react-inspector');
+var ResultPanel = require('./ResultPanel');
 var ObjectInspector = Inspector.ObjectInspector;
 var ReactTabs = require('react-tabs');
 var Tab = ReactTabs.Tab;
@@ -56,6 +57,8 @@ var Homepage = React.createClass({
 			mode: "javascript"
         };
 
+		var hasError = this.state.variables.error != undefined && this.state.variables.error != '' ? true : false;
+
 		return (
 			<div className="main-container">
 				<Navigation></Navigation>
@@ -66,16 +69,17 @@ var Homepage = React.createClass({
 						<Tabs selectedIndex={this.state.selectTab} onSelect={this.handleSelect}>
 							<TabList>
 								<Tab>Result</Tab>
-		 						<Tab>Errors </Tab>
+		 						<Tab>Errors { hasError ? <span style={{color: 'red'}}>●</span> : null}</Tab>
 							</TabList>
 							<TabPanel>
 								<div className="inspector">
 									<ObjectInspector data={ this.state.variables.variables } />
+									{/*<ResultPanel data={this.state.variables.variables} />*/}
 								</div>
         					</TabPanel>
 							<TabPanel>
-								<div>
-									{this.state.variables.error != undefined ? this.state.variables.error.message : "All good! 🎉"}
+								<div className="inspector">
+									{ hasError ? this.state.variables.error.message : "No errors, all good! 🎉"}
 								</div>
         					</TabPanel>
 						</Tabs>

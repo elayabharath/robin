@@ -21,10 +21,9 @@ var path = {
     ALL: ['src/**/*.*'],
     ENTRY_POINT: './src/app/main.js',
     HTML: 'src/index.html',
-    GEOM: 'src/Geometry.js',
     IMG: 'src/img/**/*.*',
     STATIC: 'src/static/**/*.*',
-    JS: ['src/app/**/*.js'],
+    JS: ['src/**/*.js'],
     SCSS: ['src/style/**/*.scss'],
     DEST_PROD: 'production',
     DEST_DEV: 'development',
@@ -47,7 +46,7 @@ function compileStyle(dest) {
 }
 
 function copyFiles(dest) {
-    var files = gulp.src([path.IMG, path.STATIC, path.HTML, path.GEOM])
+    var files = gulp.src([path.IMG, path.STATIC, path.HTML])
     .pipe(copy(dest, { prefix: 1 }));
     return files;
 }
@@ -99,6 +98,17 @@ gulp.task('buildJS:dev', function() {
             console.log(e.message);
         })
         .pipe(source('robin.js'))
+        .pipe(gulp.dest(path.DEST_DEV));
+});
+
+gulp.task('buildGeom:dev', function() {
+    return browserify('./src/geometry/index.js')
+        .bundle()
+        .on('error', function(e) {
+            console.log("ERROR");
+            console.log(e.message);
+        })
+        .pipe(source('geom.js'))
         .pipe(gulp.dest(path.DEST_DEV));
 });
 
@@ -166,7 +176,7 @@ gulp.task('watch:lib', function() {
 
 gulp.task('watch', function() {
     runSequence('cleanFiles:dev');
-    runSequence('buildJS:dev', 'sass:dev', 'copyFiles:dev', 'watch:html', 'watch:scss', 'watch:JS', 'watch:lib');
+    runSequence('buildJS:dev', 'buildGeom:dev', 'sass:dev', 'copyFiles:dev', 'watch:html', 'watch:scss', 'watch:JS');
     runSequence('serve:dev');
 });
 
